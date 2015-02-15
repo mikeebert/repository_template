@@ -1,5 +1,4 @@
 require 'datastore'
-require 'pry'
 
 describe Datastore do
   it 'has repositories represented as a hash' do

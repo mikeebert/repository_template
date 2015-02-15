@@ -1,5 +1,4 @@
 require 'base_object'
-require 'pry'
 
 describe BaseObject do
 
