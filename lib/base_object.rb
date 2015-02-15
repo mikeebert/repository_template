@@ -22,12 +22,18 @@ class BaseObject
     end
   end
 
+  def update(new_attributes)
+    new_attributes.each do |attr, value|
+      self.send("#{attr}=", value)
+    end
+  end
+
   private
 
   def method_missing(*args)
     method_call = args[0]
     attr_name = attr_name_for(args[0])
-    raise NoMethodError.new("Undefined Attribute: #{attr_name}") unless attrs.include?(attr_name.to_sym)
+    raise UndefinedAttributes.new("Undefined Attribute: #{attr_name}") unless attrs.include?(attr_name.to_sym)
 
     if setter?(method_call)
       instance_variable_set("@#{attr_name}", args[1])
