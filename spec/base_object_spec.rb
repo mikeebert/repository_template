@@ -4,13 +4,13 @@ require 'pry'
 describe BaseObject do
 
   context 'Inheriting class without attributes' do
-    it 'raises an error if inheriting class does not define any attributes' do
+    it 'raises an error if inheriting class does not define attr_accessors method' do
       class MockWithoutAttributes < BaseObject; end
       expect{ MockWithoutAttributes.new }.to raise_error
     end
   end
 
-  context 'Inheriting class with attributes' do
+  context 'Inheriting class with defined attr_accessors' do
     class MockObject < BaseObject
       def attr_accessors
         [:wip, :wat]
@@ -18,14 +18,16 @@ describe BaseObject do
     end
 
     let(:mock) { MockObject.new }
-    let(:combined_attrs) { BaseObject::BASE_ATTRIBUTES + MockObject.new.attr_accessors }
+    let(:combined_attributes) do
+      BaseObject::BASE_ATTRIBUTES + MockObject.new.attr_accessors
+    end
 
     it 'initializes an object with defined attr_accessors and base_attributes' do
-      expect(mock.attrs).to match(combined_attrs)
+      expect(mock.attrs).to match(combined_attributes)
     end
 
     it 'initializes an object with a set of nil attributes' do
-      combined_attrs.each do |attr|
+      combined_attributes.each do |attr|
         expect(mock.send(attr)).to be_nil
       end
     end

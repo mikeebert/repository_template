@@ -4,6 +4,10 @@ class BaseRepository
     @objects = {}
   end
 
+  def count
+    objects.count
+  end
+
   def save(object)
     object.id = id
     objects[id] = object
@@ -14,12 +18,8 @@ class BaseRepository
     objects[object_id]
   end
 
-  def count
-    objects.values.count
-  end
-
   def delete(object_id)
-    objects.delete object_id
+    objects.delete(object_id)
   end
 
   private

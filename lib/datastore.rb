@@ -10,6 +10,8 @@ class Datastore
       @repositories[key] = repository
     end
 
+    private
+
     def method_missing(*args)
       repo_key = args.first
       repositories.fetch repo_key
