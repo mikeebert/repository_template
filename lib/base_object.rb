@@ -2,18 +2,13 @@ class BaseObject
   UndefinedAttributes = Class.new(StandardError)
   BASE_ATTRIBUTES = [:id]
 
-  def initialize
-    attrs.each do |attr|
-      instance_variable_set("@#{attr}", nil)
-    end
-  end
-
-  def attrs
-    BASE_ATTRIBUTES + attr_accessors
-  end
-
   def attr_accessors
     raise UndefinedAttributes.new('Please provide array of attributes with attr_accessors method in inheriting class.')
+  end
+
+  def initialize(params = nil)
+    set_base_attrs
+    update(params) if params
   end
 
   def attributes
@@ -29,6 +24,16 @@ class BaseObject
   end
 
   private
+
+  def set_base_attrs
+    attrs.each do |attr|
+      instance_variable_set("@#{attr}", nil)
+    end
+  end
+
+  def attrs
+    BASE_ATTRIBUTES + attr_accessors
+  end
 
   def method_missing(*args)
     method_call = args[0]

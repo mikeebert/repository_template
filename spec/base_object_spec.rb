@@ -24,13 +24,28 @@ describe BaseObject do
 
     describe '#initialize behavior' do
       it 'initializes an object with defined attr_accessors and base_attributes' do
-        expect(mock.attrs).to match(combined_attributes)
+        expect(mock.send(:attrs)).to match(combined_attributes)
       end
 
       it 'initializes an object with a set of nil attributes' do
         combined_attributes.each do |attr|
           expect(mock.send(attr)).to be_nil
         end
+      end
+
+      it 'will set an attribute accordingly if passed in to initialize' do
+        new_mock = MockObject.new(wat: 'what')
+        expect(new_mock.wat).to eq "what"
+      end
+
+      it 'sets multiple attributes on initialize' do
+        new_mock = MockObject.new(wat: 'what', wip: 'WIP')
+        expect(new_mock.wat).to eq "what"
+        expect(new_mock.wip).to eq "WIP"
+      end
+
+      it 'raises an error if initialized with an unknown attribute' do
+        expect{MockObject.new(no_attr: 'i should break')}.to raise_error(undefined_error)
       end
     end
 
