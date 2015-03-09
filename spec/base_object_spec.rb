@@ -3,28 +3,30 @@ require 'base_object'
 describe BaseObject do
   let(:undefined_error) { described_class::UndefinedAttributes }
 
-  context 'Inheriting class without attributes' do
+  context 'Inheriting class with no attr_accessors defined' do
+    class MockWithoutAttributes < BaseObject
+    end
+
     it 'raises an error if inheriting class does not define attr_accessors method' do
-      class MockWithoutAttributes < BaseObject; end
       expect{ MockWithoutAttributes.new }.to raise_error undefined_error
     end
   end
 
   context 'Inheriting class with defined attr_accessors' do
+
     class MockObject < BaseObject
-      def attr_accessors
-        [:wip, :wat]
-      end
+      attributes :wip, :wat
     end
 
     let(:mock) { MockObject.new }
+    let(:base_attribute) { [:id] }
     let(:combined_attributes) do
-      BaseObject::BASE_ATTRIBUTES + MockObject.new.attr_accessors
+      base_attribute + [:wip, :wat]
     end
 
     describe '#initialize behavior' do
       it 'initializes an object with defined attr_accessors and base_attributes' do
-        expect(mock.send(:attrs)).to match(combined_attributes)
+        expect(mock.send(:attrs)).to match_array(combined_attributes)
       end
 
       it 'initializes an object with a set of nil attributes' do
