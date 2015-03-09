@@ -1,21 +1,10 @@
-module Attributes
-  ID_ATTRIBUTE = :id
-
-  def self.included(base)
-    def base.attributes(*attribute_list)
-      @attribute_list = attribute_list << ID_ATTRIBUTE
-    end
-
-    def base.attribute_list
-      @attribute_list ||= []
-    end
-  end
-end
-
 class BaseObject
-  include Attributes
-
+  ID_ATTRIBUTE = :id
   UndefinedAttributes = Class.new(StandardError)
+
+  def self.attributes(*attribute_list)
+    @attribute_list = attribute_list << ID_ATTRIBUTE
+  end
 
   def initialize(params = nil)
     set_base_attributes
@@ -28,13 +17,17 @@ class BaseObject
     end
   end
 
-  def attributes
+  def to_h
     attrs.each_with_object({}) do |attr, hash|
       hash[attr] = self.send(attr)
     end
   end
 
   private
+
+  def self.attribute_list
+    @attribute_list ||= []
+  end
 
   def set_base_attributes
     attrs.each do |attr|

@@ -66,11 +66,11 @@ describe BaseObject do
       end
     end
 
-    describe '#attributes' do
+    describe '#to_h' do
       it 'provides all the attributes and their values as a hash' do
         mock.wip = 'WIP'
         mock.wat = 'woot'
-        expect(mock.attributes).to match( { wip: 'WIP',
+        expect(mock.to_h).to match( { wip: 'WIP',
                                             wat: 'woot',
                                             id: nil } )
       end
