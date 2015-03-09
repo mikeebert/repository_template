@@ -46,7 +46,7 @@ class BaseObject
     @attribute_list ||= self.class.attribute_list
 
     if @attribute_list.empty?
-      raise UndefinedAttributes.new("Please provide list of attr_accessors: i.e `attr_accessors :foo, :bar`")
+      raise UndefinedAttributes.new("Missing attributes list in class: #{self.class}")
     else
       @attribute_list
     end
